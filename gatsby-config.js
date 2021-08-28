@@ -1,5 +1,5 @@
-var dotenv = require("dotenv");
-dotenv.config();
+var dotenv = require("dotenv")
+dotenv.config()
 
 module.exports = {
   siteMetadata: {
@@ -7,12 +7,13 @@ module.exports = {
     description: `A starter for a e-commerce powered by Gatsby and Flotiq`,
     author: `@flotiq`,
   },
-  plugins: [{
-      "resolve": "gatsby-source-flotiq",
-      "options": {
-        "authToken": process.env.GATSBY_FLOTIQ_API_KEY,
-        "forceReload": false,
-        "includeTypes": ['product', '_media']
+  plugins: [
+    {
+      resolve: "gatsby-source-flotiq",
+      options: {
+        authToken: process.env.GATSBY_FLOTIQ_API_KEY,
+        forceReload: false,
+        includeTypes: ["product", "_media"],
       },
     },
     `gatsby-plugin-react-helmet`,
@@ -39,9 +40,9 @@ module.exports = {
       },
     },
     {
-      resolve: "gatsby-plugin-snipcart",
+      resolve: "gatsby-plugin-snipcartv3",
       options: {
-        apiKey: process.env.SNIPCART_API_KEY,
+        apiKey: process.env.GATSBY_SNIPCART_APIKEY,
         autopop: true,
       },
     },
