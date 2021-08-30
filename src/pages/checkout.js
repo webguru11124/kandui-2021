@@ -1,5 +1,5 @@
 import cardValidator from "card-validator"
-import React, { useReducer, useState } from "react"
+import React, { useEffect, useReducer, useState } from "react"
 import { Helmet } from "react-helmet"
 import { v4 as uuidv4 } from "uuid"
 import Layout from "../components/layout"
