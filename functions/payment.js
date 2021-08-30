@@ -6,8 +6,25 @@ exports.handler = async function(event) {
   // Retrieve payment information (depends on how your application is made)
   const requestBody = JSON.parse(event.body)
 
-  // Process the payment with the gateway of your choice here
+  // this key should never be on client side code. this is serverless function so its safe here
+  // Dont forget to change this to yours
+  const xenditSecretKey =
+    "xnd_development_eqCZkBRK5NFf7IQrKawRshVG156og4tQUOiNTz8Sc5Cr0PTO1Isd6FPpRtXU0"
 
+  // Payment processing with xendit
+  fetch("https://api.xendit.co/credit_card_charges", {
+    body: JSON.stringify({
+      external_id: requestBody.transactionId,
+      token_id: requestBody.xenditTokenId,
+      authentication_id: requestBody.authentication_id,
+      amount: requestBody.amount,
+    }),
+    headers: {
+      Authorization: `Basic ${xenditSecretKey}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    method: "POST",
+  })
   // Confirm payment with the /payment endpoint
   const response = await fetch(
     "https://payment.snipcart.com/api/private/custom-payment-gateway/payment",

@@ -6,6 +6,7 @@
   "author": "Flotiq Developers <hello@flotiq.com>",
   "dependencies": {
     "bootstrap": "^4.5.2",
+    "card-validator": "^8.1.1",
     "disqus-react": "^1.0.9",
     "dotenv": "^8.6.0",
     "gatsby": "^2.28.2",
