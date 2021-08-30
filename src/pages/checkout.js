@@ -1,3 +1,4 @@
+import { navigate } from "@reach/router"
 import cardValidator from "card-validator"
 import React, { useEffect, useReducer, useState } from "react"
 import { Helmet } from "react-helmet"
@@ -6,26 +7,24 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 
 const Checkout = () => {
-  const [price, setPrice] = useState(100)
-  const [loading, setLoading] = useState(false)
-  const [btnDisabled, setBtnDisabled] = useState(false)
+  const [price, setPrice] = useState(null)
+  const [loading, setLoading] = useState(true)
   const sessionId = React.useRef(null)
 
   useEffect(() => {
-    // Get public token from query string
+    // Get snipcart public token from query string
     const publicToken = new URLSearchParams(window.location.search).get(
       "publicToken"
     )
-
     // Fetch payment session from API
     fetch(
       `https://payment.snipcart.com/api/public/custom-payment-gateway/payment-session?publicToken=${publicToken}`
     )
       .then(res => {
+        setLoading(false)
         if (res.ok) {
           return res.json()
         } else {
-          setLoading(false)
           throw "not snipcart checkout"
         }
       })
@@ -57,6 +56,7 @@ const Checkout = () => {
 
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
   const [error, setError] = useState("")
+  const [btnDisabled, setBtnDisabled] = useState(false)
 
   const updateFieldValue = field => event => {
     dispatch({
@@ -82,21 +82,25 @@ const Checkout = () => {
     const number = cardValidator.number(state.card)
     if (!number.isValid) {
       setError("Card number not valid")
+      setBtnDisabled(false)
       return undefined
     }
     const month = cardValidator.expirationMonth(state.month)
     if (!month.isValid) {
       setError("Card expiry month is not valid")
+      setBtnDisabled(false)
       return undefined
     }
     const year = cardValidator.expirationYear(state.year)
     if (!year.isValid) {
       setError("Card expiry year is not valid")
+      setBtnDisabled(false)
       return undefined
     }
     const cvv = cardValidator.cvv(state.cvv)
     if (!cvv.isValid) {
       setError("Card security code is not valid")
+      setBtnDisabled(false)
       return undefined
     }
 
@@ -106,13 +110,13 @@ const Checkout = () => {
       // if this is showing error it might be you messed up somewhere before this step
       if (err) {
         setError(err.message)
+        setBtnDisabled(false)
         return undefined
       }
       if (res) {
         if (res.status === "VERIFIED") {
           // Get the token ID:
           const token = res.id
-
           // send token id from xendit and snipcart info to serverless function
 
           const transactionId = uuidv4()
@@ -128,7 +132,9 @@ const Checkout = () => {
             }),
           })
             .then(res => res.json())
-            .then(body => (window.location.href = body.returnUrl))
+            .then(body => {
+              if (body.returnUrl) navigate(body.returnUrl)
+            })
             .catch(err => console.log("err", err))
         } else if (res.status === "IN_REVIEW") {
           // FIX THIS
@@ -182,7 +188,7 @@ const Checkout = () => {
                   margin: "0 auto 30px",
                 }}
               >
-                <label for="name">Enter cardholder name</label>
+                <label htmlFor="name">Enter cardholder name</label>
                 <input
                   type="text"
                   name="name"
@@ -190,7 +196,7 @@ const Checkout = () => {
                   onChange={updateFieldValue("name")}
                   required
                 />
-                <label for="card">Enter Credit Card Number</label>
+                <label htmlFor="card">Enter Credit Card Number</label>
                 <input
                   type="number"
                   name="card"
@@ -198,7 +204,7 @@ const Checkout = () => {
                   onChange={updateFieldValue("card")}
                   required
                 />
-                <label for="month">Enter Card Expiry Month</label>
+                <label htmlFor="month">Enter Card Expiry Month</label>
 
                 <input
                   type="number"
@@ -207,7 +213,7 @@ const Checkout = () => {
                   onChange={updateFieldValue("month")}
                   required
                 />
-                <label for="year">Enter Card Expiry Year</label>
+                <label htmlFor="year">Enter Card Expiry Year</label>
 
                 <input
                   type="number"
@@ -217,7 +223,7 @@ const Checkout = () => {
                   required
                 />
 
-                <label for="cvv">Enter Card cvv</label>
+                <label htmlFor="cvv">Enter Card cvv</label>
                 <input
                   type="number"
                   name="cvv"
