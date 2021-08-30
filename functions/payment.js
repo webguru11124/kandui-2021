@@ -16,7 +16,6 @@ exports.handler = async function(event) {
     body: JSON.stringify({
       external_id: requestBody.transactionId,
       token_id: requestBody.xenditTokenId,
-      authentication_id: requestBody.authentication_id,
       amount: requestBody.amount,
     }),
     headers: {
