@@ -75,7 +75,7 @@ const Checkout = () => {
 
     // Set your client's Xendit public key here
     Xendit.setPublishableKey(
-      "xnd_public_development_VZtcm4H4FFrahZHRqM3eWJIUDaGSQHhjAaYxB1YearHZzY7P6mxK9oMUlYREy"
+      "xnd_public_development_NIyDfL1xgOf5wpJrd+BIEjXEZdej9NJ0xSfg+Rxh+GDe/7SlBARzgg=="
     )
 
     // run card validation using library
