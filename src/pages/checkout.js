@@ -1,5 +1,5 @@
 import { navigate } from "@reach/router"
-import cardValidator from "cardValidator"
+import cardValidator from "card-validator"
 import React, { useEffect, useReducer, useState } from "react"
 import { Helmet } from "react-helmet"
 import { v4 as uuidv4 } from "uuid"
